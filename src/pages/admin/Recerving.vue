@@ -1,6 +1,16 @@
-<script setup lang="ts">
+<script setup lang="js">
 import Sidebar from './Sidebar.vue';
 
+function showModal(nama, bukti, surat) {
+        document.getElementById('modal').classList.remove('hidden');
+        document.getElementById('modalNama').textContent = nama;
+        document.getElementById('modalBukti').textContent = bukti;
+        document.getElementById('modalSurat').textContent = surat;
+    }
+
+    function hideModal() {
+        document.getElementById('modal').classList.add('hidden');
+    }
 </script>
 
 <template>
@@ -61,7 +71,7 @@ import Sidebar from './Sidebar.vue';
                     </div>
 
                     <svg width="202" height="160" viewBox="0 0 202 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-            
+
                         <g mask="url(#mask0_143_297)">
                             <ellipse cx="176.149" cy="64.2848" rx="64.6266" ry="76.8457"
                                 fill="url(#paint1_linear_143_297)" />
@@ -90,13 +100,145 @@ import Sidebar from './Sidebar.vue';
 
 
                 </div>
-                <table class="col-span-10" >
-                    <th>NO</th>
-                    <th>Nama</th>
-                    <th>Bukti bayar</th>
-                    <th>Surat Keterangan</th>
-                </table>
+                <!-- Table -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden col-span-10 row-span-4  mt-20">
+                    <table class="table-auto w-full text-left border-collapse border border-gray-200">
+                        <thead class="bg-blue-200 text-center">
+                            <tr>
+                                <th class="px-4 py-2 border border-gray-300">No</th>
+                                <th class="px-4 py-2 border border-gray-300">Nama</th>
+                                <th class="px-4 py-2 border border-gray-300">Bukti Pembayaran</th>
+                                <th class="px-4 py-2 border border-gray-300">Surat Keterangan</th>
+                                <th class="px-4 py-2 border border-gray-300">AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Row 1 -->
+                            <tr>
+                                <td class="px-4 py-2 border border-gray-300 text-center">1</td>
+                                <td class="px-4 py-2 border border-gray-300 flex items-center">
+                                    <img src="https://via.placeholder.com/50" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <p class="font-bold">Aing maung</p>
+                                        <p class="text-sm text-gray-500">Istimewa Muhammadiyah Sudan - PCIM Khartoum
+                                            Sudan</p>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="flex items-center justify-center">
+                                    <button class=" " onclick="showModal()">
 
+                                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="50" height="50" rx="10" fill="#1677FE" fill-opacity="0.3" />
+                                            <path
+                                                d="M25.7143 20.7142C24.5776 20.7142 23.4876 21.1657 22.6838 21.9695C21.8801 22.7732 21.4286 23.8633 21.4286 24.9999C21.4286 26.1366 21.8801 27.2267 22.6838 28.0304C23.4876 28.8341 24.5776 29.2856 25.7143 29.2856C26.8509 29.2856 27.941 28.8341 28.7447 28.0304C29.5485 27.2267 30 26.1366 30 24.9999C30 23.8633 29.5485 22.7732 28.7447 21.9695C27.941 21.1657 26.8509 20.7142 25.7143 20.7142ZM25.7143 32.1428C23.8199 32.1428 22.0031 31.3902 20.6635 30.0507C19.324 28.7111 18.5714 26.8943 18.5714 24.9999C18.5714 23.1055 19.324 21.2887 20.6635 19.9492C22.0031 18.6096 23.8199 17.8571 25.7143 17.8571C27.6087 17.8571 29.4255 18.6096 30.765 19.9492C32.1046 21.2887 32.8571 23.1055 32.8571 24.9999C32.8571 26.8943 32.1046 28.7111 30.765 30.0507C29.4255 31.3902 27.6087 32.1428 25.7143 32.1428ZM25.7143 14.2856C18.5714 14.2856 12.4714 18.7285 10 24.9999C12.4714 31.2714 18.5714 35.7142 25.7143 35.7142C32.8571 35.7142 38.9571 31.2714 41.4286 24.9999C38.9571 18.7285 32.8571 14.2856 25.7143 14.2856Z"
+                                                fill="#1677FE" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr class="bg-gray-50">
+                                <td class="px-4 py-2 border border-gray-300 text-center">2</td>
+                                <td class="px-4 py-2 border border-gray-300 flex items-center">
+                                    <img src="https://via.placeholder.com/50" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <p class="font-bold">Meowww</p>
+                                        <p class="text-sm text-gray-500">Istimewa Muhammadiyah Sudan - PCIM Khartoum
+                                            Sudan</p>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="flex items-center justify-center">
+                                    <button class=" ">
+
+                                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="50" height="50" rx="10" fill="#1677FE" fill-opacity="0.3" />
+                                            <path
+                                                d="M25.7143 20.7142C24.5776 20.7142 23.4876 21.1657 22.6838 21.9695C21.8801 22.7732 21.4286 23.8633 21.4286 24.9999C21.4286 26.1366 21.8801 27.2267 22.6838 28.0304C23.4876 28.8341 24.5776 29.2856 25.7143 29.2856C26.8509 29.2856 27.941 28.8341 28.7447 28.0304C29.5485 27.2267 30 26.1366 30 24.9999C30 23.8633 29.5485 22.7732 28.7447 21.9695C27.941 21.1657 26.8509 20.7142 25.7143 20.7142ZM25.7143 32.1428C23.8199 32.1428 22.0031 31.3902 20.6635 30.0507C19.324 28.7111 18.5714 26.8943 18.5714 24.9999C18.5714 23.1055 19.324 21.2887 20.6635 19.9492C22.0031 18.6096 23.8199 17.8571 25.7143 17.8571C27.6087 17.8571 29.4255 18.6096 30.765 19.9492C32.1046 21.2887 32.8571 23.1055 32.8571 24.9999C32.8571 26.8943 32.1046 28.7111 30.765 30.0507C29.4255 31.3902 27.6087 32.1428 25.7143 32.1428ZM25.7143 14.2856C18.5714 14.2856 12.4714 18.7285 10 24.9999C12.4714 31.2714 18.5714 35.7142 25.7143 35.7142C32.8571 35.7142 38.9571 31.2714 41.4286 24.9999C38.9571 18.7285 32.8571 14.2856 25.7143 14.2856Z"
+                                                fill="#1677FE" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr>
+                                <td class="px-4 py-2 border border-gray-300 text-center">3</td>
+                                <td class="px-4 py-2 border border-gray-300 flex items-center">
+                                    <img src="https://via.placeholder.com/50" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <p class="font-bold">YYYY</p>
+                                        <p class="text-sm text-gray-500">Istimewa Muhammadiyah Sudan - PCIM Khartoum
+                                            Sudan</p>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="flex items-center justify-center">
+                                    <button class=" ">
+
+                                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="50" height="50" rx="10" fill="#1677FE" fill-opacity="0.3" />
+                                            <path
+                                                d="M25.7143 20.7142C24.5776 20.7142 23.4876 21.1657 22.6838 21.9695C21.8801 22.7732 21.4286 23.8633 21.4286 24.9999C21.4286 26.1366 21.8801 27.2267 22.6838 28.0304C23.4876 28.8341 24.5776 29.2856 25.7143 29.2856C26.8509 29.2856 27.941 28.8341 28.7447 28.0304C29.5485 27.2267 30 26.1366 30 24.9999C30 23.8633 29.5485 22.7732 28.7447 21.9695C27.941 21.1657 26.8509 20.7142 25.7143 20.7142ZM25.7143 32.1428C23.8199 32.1428 22.0031 31.3902 20.6635 30.0507C19.324 28.7111 18.5714 26.8943 18.5714 24.9999C18.5714 23.1055 19.324 21.2887 20.6635 19.9492C22.0031 18.6096 23.8199 17.8571 25.7143 17.8571C27.6087 17.8571 29.4255 18.6096 30.765 19.9492C32.1046 21.2887 32.8571 23.1055 32.8571 24.9999C32.8571 26.8943 32.1046 28.7111 30.765 30.0507C29.4255 31.3902 27.6087 32.1428 25.7143 32.1428ZM25.7143 14.2856C18.5714 14.2856 12.4714 18.7285 10 24.9999C12.4714 31.2714 18.5714 35.7142 25.7143 35.7142C32.8571 35.7142 38.9571 31.2714 41.4286 24.9999C38.9571 18.7285 32.8571 14.2856 25.7143 14.2856Z"
+                                                fill="#1677FE" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Row 4 -->
+                            <tr class="bg-gray-50">
+                                <td class="px-4 py-2 border border-gray-300 text-center">4</td>
+                                <td class="px-4 py-2 border border-gray-300 flex items-center">
+                                    <img src="https://via.placeholder.com/50" alt="Avatar"
+                                        class="w-12 h-12 rounded-full mr-4">
+                                    <div>
+                                        <p class="font-bold">OK</p>
+                                        <p class="text-sm text-gray-500">Istimewa Muhammadiyah Sudan - PCIM Khartoum
+                                            Sudan</p>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">Terverifikasi</td>
+                                <td class="flex items-center justify-center">
+                                    <button class=" ">
+
+                                        <svg width="35" height="35" viewBox="0 0 50 50" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="50" height="50" rx="10" fill="#1677FE" fill-opacity="0.3" />
+                                            <path
+                                                d="M25.7143 20.7142C24.5776 20.7142 23.4876 21.1657 22.6838 21.9695C21.8801 22.7732 21.4286 23.8633 21.4286 24.9999C21.4286 26.1366 21.8801 27.2267 22.6838 28.0304C23.4876 28.8341 24.5776 29.2856 25.7143 29.2856C26.8509 29.2856 27.941 28.8341 28.7447 28.0304C29.5485 27.2267 30 26.1366 30 24.9999C30 23.8633 29.5485 22.7732 28.7447 21.9695C27.941 21.1657 26.8509 20.7142 25.7143 20.7142ZM25.7143 32.1428C23.8199 32.1428 22.0031 31.3902 20.6635 30.0507C19.324 28.7111 18.5714 26.8943 18.5714 24.9999C18.5714 23.1055 19.324 21.2887 20.6635 19.9492C22.0031 18.6096 23.8199 17.8571 25.7143 17.8571C27.6087 17.8571 29.4255 18.6096 30.765 19.9492C32.1046 21.2887 32.8571 23.1055 32.8571 24.9999C32.8571 26.8943 32.1046 28.7111 30.765 30.0507C29.4255 31.3902 27.6087 32.1428 25.7143 32.1428ZM25.7143 14.2856C18.5714 14.2856 12.4714 18.7285 10 24.9999C12.4714 31.2714 18.5714 35.7142 25.7143 35.7142C32.8571 35.7142 38.9571 31.2714 41.4286 24.9999C38.9571 18.7285 32.8571 14.2856 25.7143 14.2856Z"
+                                                fill="#1677FE" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+                    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+                        <h2 class="text-lg font-bold mb-4">Detail Data</h2>
+                        <p><strong>Nama:</strong> <span id="modalNama"></span></p>
+                        <p><strong>Bukti Pembayaran:</strong> <span id="modalBukti"></span></p>
+                        <p><strong>Surat Keterangan:</strong> <span id="modalSurat"></span></p>
+                        <div class="flex justify-end mt-4 gap-2">
+                            <button onclick="hideModal()"
+                                class="px-4 py-2 bg-gray-500 text-white rounded-lg">Tutup</button>
+                            <button class="px-4 py-2 bg-green-500 text-white rounded-lg">Diterima</button>
+                            <button class="px-4 py-2 bg-red-500 text-white rounded-lg">Ditolak</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
