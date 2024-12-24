@@ -23,8 +23,7 @@ const saveDoc = () => {
 function resizeCanvas() {
    if (!signatureCanvas.value || !signaturePad) return
 
-   let ratio = Math.max(window.devicePixelRatio || 1, 1);
-   if (detectDevice.isDesktop()) ratio *= 0.5
+   const ratio = Math.max(window.devicePixelRatio || 1, 1) * 0.5;
    signatureCanvas.value.width = signatureCanvas.value.offsetWidth * ratio;
    signatureCanvas.value.height = signatureCanvas.value.offsetHeight * ratio;
    signatureCanvas.value.getContext("2d")?.scale(ratio, ratio);
