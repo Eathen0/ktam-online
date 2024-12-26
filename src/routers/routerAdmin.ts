@@ -4,6 +4,10 @@ const router: RouteRecordRaw[] = [
    {
       path: '',
       component: () => import('@/pages/admin/Dashboard.vue'),
+   },
+   {
+      path: 'registrant',
+      component: () => import('@/pages/admin/Registrant.vue'),
    }
 ]
 
