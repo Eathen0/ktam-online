@@ -25,6 +25,7 @@ const PAGE1_CONTENT = [
 const PAGE2_CONTENT = [
    "Profinsi",
    "Kabupaten",
+   "Kecamatan",
    "Desa / Kelurahan",
    "Alamat",
    "Kode Pos"
@@ -32,12 +33,13 @@ const PAGE2_CONTENT = [
 
 const PAGE2_CONTENT2 = [
    "Nama Usaha",
-   "Jabatan",
+   "Bidang Usaha",
+   "Jumlah Karyawan",
+   "Tahun Berdiri",
    "Alamat Usaha",
    "Nama Instansi Bekerja",
-   "Bidang Usaha",
+   "Jabatan",
    "Alamat Instansi Bekerja",
-   "Tahun Berdiri"
 ]
 
 const testValue = [
@@ -86,7 +88,7 @@ const addContent = (content: string[], doc: jsPDF, currentYPositon: number) => {
 }
 
 
-export default (signature: string) => {
+export default (signature: string, sigOrient: string) => {
    const doc = new jsPDF({
       format: 'a4',
       orientation: 'portrait',
@@ -126,14 +128,19 @@ export default (signature: string) => {
    
    doc.text('Pemohon', 50, docHeight - 100, { align: 'left' })
    doc.text(namaPemohon, 50 - (namaPemohon.length > 7 ? namaPemohon.length : 0), docHeight - 25, { align: 'left' })
-   doc.addImage(signature, 'PNG', 50, docHeight - 100, 75, 75)
+
+   if (sigOrient == "landscape")
+      doc.addImage(signature, 'PNG', 100, docHeight - 100, 75, 75, undefined, undefined, -270)
+   else
+      doc.addImage(signature, 'PNG', 50, docHeight - 100, 75, 75)
+   
    doc.text('Ketua', centerOfDoc - 37.5 + 20, docHeight - 100, { align: 'left' })
    doc.text('Supriyanto', centerOfDoc - 37.5 + 10, docHeight - 25, { align: 'left' })
-   doc.addImage(signatureKetum, 'PNG', centerOfDoc - 37.5,  docHeight - 100, 75, 75)
-   doc.addImage(stample, 'PNG',        centerOfDoc + 35,    docHeight - 100, 75, 75)
+   doc.addImage(signatureKetum, 'PNG', centerOfDoc - 37.5, docHeight - 100, 75, 75)
+   doc.addImage(stample, 'PNG', centerOfDoc + 35, docHeight - 100, 75, 75)
    doc.text('Sekertaris', docWidth - 100, docHeight - 100, { align: 'left' })
    doc.text('Rohwan, SH. MH', docWidth - 110 - 5, docHeight - 25, { align: 'left' })
-   doc.addImage(signatureSekre, 'PNG', docWidth - 110,       docHeight - 100, 75, 75)
+   doc.addImage(signatureSekre, 'PNG', docWidth - 110, docHeight - 100, 75, 75)
 
    // .text(':.......................................', INNER_MARGIN, 160, { align: 'left' })
    // doc.addImage(logoIkapeksi, 'PNG', 10, 10, 30, 30)

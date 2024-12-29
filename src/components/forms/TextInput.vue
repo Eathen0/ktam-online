@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue';
 
+defineOptions({ inheritAttrs: false });
 const label = shallowRef<HTMLSpanElement>();
 </script>
 

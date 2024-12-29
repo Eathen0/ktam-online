@@ -9,7 +9,7 @@ const menus = [
             </svg>`
         ,
         name: 'Home',
-        link: '/admin',
+        routeName: 'admin-dashboard',
         className: ''
     },
     {
@@ -30,7 +30,7 @@ const menus = [
             </svg>
         `,
         name: 'Pendaftar',
-        link: '/admin/pendaftar',
+        routeName: '',
         className: ''
     },
     {
@@ -42,7 +42,7 @@ const menus = [
             </svg>
         `,
         name: 'Bukti Bayar',
-        link: '/admin/bukti-bayar',
+        routeName: 'admin-recive',
         className: ''
     },
     {
@@ -54,7 +54,7 @@ const menus = [
             </svg>
         `,
         name: 'Anggota',
-        link: '/admin/anggota',
+        routeName: '',
         className: ''
     },
     {
@@ -66,7 +66,7 @@ const menus = [
             </svg>
         `,
         name: 'Settings',
-        link: '/admin/settings',
+        routeName: 'admin-settings',
         className: 'mt-auto ml-auto'
     },
     {
@@ -78,18 +78,18 @@ const menus = [
             </svg>
         `,
         name: 'Logout',
-        link: '/admin/logout',
+        routeName: 'home',
         className: ''
     }
 ]
 </script>
 
 <template>
-    <div class="lg:h-screen pl-4 py-4 lg:pr-0 pr-4">
+    <div class="sticky top-0 lg:h-screen pl-4 py-4 lg:pr-0 pr-4 z-50">
         <ul class="bg-gradient-to-b from-primary-lighter-2 to-primary-darker text-white flex lg:flex-col flex-row items-center gap-10 rounded-xl p-5 h-full">
-            <li v-for="{ icon, className, name } in menus" :class="className" class="group relative">
-                <a href="#" v-html="icon">
-                </a>
+            <li :key="ix" v-for="({ icon, className, name, routeName }, ix) in menus" :class="className" class="group relative">
+                <RouterLink :to="{ name: routeName }" v-html="icon">
+                </RouterLink>
                 <span class="lg:block hidden transition-all left-12 top-1/2 -translate-y-1/2 bg-[#2881FE] pointer-events-none duration-300 absolute opacity-0 group-hover:opacity-100 group-hover:translate-x-0 w-32 py-2 px-4 rounded-r-xl">{{ name }}</span>
             </li>
         </ul>

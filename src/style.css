@@ -4,7 +4,9 @@
 
 * {
    /* color: black !important; */
-   scrollbar-color: rgba(89, 89, 89, 0.35) transparent !important;  ;
+   scrollbar-color: rgba(89, 89, 89, 0.35) transparent !important;
+   /* background: rgba(255, 0, 0, 0.1) !important;
+   border: solid red 1px !important; */
 }
 
 :root, [data-theme] {

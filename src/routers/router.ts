@@ -1,5 +1,6 @@
 import Home from "@/pages/Home.vue";
 import routerAdmin from "@/routers/routerAdmin";
+import routerSuperAdmin from "@/routers/routerSuperAdmin";
 import { createRouter, createWebHistory } from "vue-router";
 
 export default createRouter({
@@ -8,10 +9,12 @@ export default createRouter({
       {
          path: '/',
          alias: '/home',
+         name: 'home',
          component: Home,
       },
       {
          path: '/login',
+         name: 'login',
          component: () => import('@/pages/Login.vue')
       },
       {
@@ -29,10 +32,17 @@ export default createRouter({
          name: 'application-letter',
          component: () => import('@/pages/ApplicationLetter.vue')
       },
+      // ADMIN ROUTES
       {
          path: '/admin',
          component: () => import('@/components/layouts/AdminLayout.vue'),
          children: routerAdmin
+      },
+      // SUPER ADMIN ROUTES
+      {
+         path: '/super-admin',
+         component: () => import('@/components/layouts/SuperAdminLayout.vue'),
+         children: routerSuperAdmin
       }
    ]
 })

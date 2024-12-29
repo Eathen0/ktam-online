@@ -101,7 +101,7 @@ useEventListener(window, 'resize', () => {
 <template>
    <div class="grid grid-cols-11 gap-4 xl:grid-rows-5 grid-rows-9 w-full xl:h-screen p-4">
       <div class="xl:col-span-6 lg:col-span-11 col-span-12 lg:row-span-3 row-span-2 overflow-hidden rounded-2xl">
-         <div class="flex lg:pt-4">
+         <div class="flex">
             <p class="font-bold text-lg">Dashboard</p>
             <div class="relative ml-4 w-fit">
                <svg width="28" height="23" viewBox="0 0 28 23" fill="none" xmlns="http://www.w3.org/2000/svg">

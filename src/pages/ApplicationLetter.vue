@@ -8,7 +8,6 @@ import trimCanvas from '@/utils/trimCanvas';
 import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
 import useEventListener from '@/hooks/useEventListener';
 import pdfTemplate from '@/utils/pdfTemplate';
-import detectDevice from '@/utils/detectDevice';
 
 const
 signatureOrientation = ref<'portrait' | 'landscape'>('portrait'),
@@ -17,8 +16,10 @@ sigDataUrl = ref<string | null>(null),
 canvasIsShown = ref(false);
 let signaturePad: SignaturePad | undefined = undefined
 const saveDoc = () => {
-   if (sigDataUrl.value)
-      pdfTemplate(sigDataUrl.value).save('test-pdf')
+   if (sigDataUrl.value && signatureOrientation.value) {
+      pdfTemplate(sigDataUrl.value, signatureOrientation.value).save('test-pdf')
+   }
+
 }
 function resizeCanvas() {
    if (!signatureCanvas.value || !signaturePad) return
@@ -45,7 +46,7 @@ const showSignatureCanvas = (show: boolean) => {
    if (show) {
       canvasIsShown.value = true
       document.body.style.overflow = 'hidden'
-      signaturePad?.clear()
+      resizeCanvas()
    } else {
       document.body.style.overflow = 'auto'
       canvasIsShown.value = false
@@ -58,7 +59,7 @@ onMounted(() => {
    if (signatureCanvas.value) {
       signaturePad = new SignaturePad(signatureCanvas.value, {
          minWidth: 2.5,
-         maxWidth: 7
+         maxWidth: 5
       });
       resizeCanvas();
    }
@@ -70,9 +71,9 @@ onUnmounted(() => {
 
 <template>
    <div class="bg-gray-200 h-max">
-      <div class="min-h-screen h-full flex flex-col lg:flex-row justify-center items-center lg:items-start gap-4">
+      <div class="min-h-screen h-full lg:pb-0 pb-6 flex flex-col lg:flex-row justify-center items-center lg:items-start gap-4">
          <!-- DISPLAYED PDF -->
-         <div class="flex flex-col relative bg-white py-[2.5em] px-[4em] w-screen md:aspect-[1/1.414] aspect-auto"
+         <div class="flex flex-col relative bg-white py-[2.5em] sm:px-[4em] px-[3em] w-screen md:aspect-[1/1.414] aspect-auto"
             :style="{ maxHeight: 'auto', maxWidth: '210mm', fontSize: 'clamp(12px, 2vw, 16px)', fontFamily: 'serif' }">
             <div class="text-center">
                <img :src="logoIkapeksi" class="inline-block w-[10em]">
@@ -207,7 +208,12 @@ onUnmounted(() => {
                         <td class="align-top w-full">......................................................</td>
                      </tr>
                      <tr>
-                        <td class="min-w-[20ch] align-top">Jabatan</td>
+                        <td class="min-w-[20ch] align-top">Bidang Usaha</td>
+                        <td class="align-top">:</td>
+                        <td class="align-top w-full">......................................................</td>
+                     </tr>
+                     <tr>
+                        <td class="min-w-[20ch] align-top">Tahun Berdiri</td>
                         <td class="align-top">:</td>
                         <td class="align-top w-full">......................................................</td>
                      </tr>
@@ -222,7 +228,7 @@ onUnmounted(() => {
                         <td class="align-top w-full">......................................................</td>
                      </tr>
                      <tr>
-                        <td class="min-w-[20ch] align-top">Bidang Usaha</td>
+                        <td class="min-w-[20ch] align-top">Jabatan</td>
                         <td class="align-top">:</td>
                         <td class="align-top w-full">......................................................</td>
                      </tr>
@@ -231,17 +237,12 @@ onUnmounted(() => {
                         <td class="align-top">:</td>
                         <td class="align-top w-full">......................................................</td>
                      </tr>
-                     <tr>
-                        <td class="min-w-[20ch] align-top">Tahun Berdiri</td>
-                        <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
-                     </tr>
                   </tbody>
                </table>
             </div>
 
             <div class="flex justify-between my-10">
-               <div class="relative min-w-[10em] text-center">
+               <div class="relative lg:min-w-[10em] min-w-[8em] text-center">
                   <h1>Pemohon</h1>
                   <div v-if="!sigDataUrl" @click="showSignatureCanvas(true)"
                      class="lg:h-[7em] lg:w-[12em] w-[9em] h-full lg:px-[2em] bg-gray-200 inline-flex justify-center items-center cursor-pointer lg:text-sm text-xs">
@@ -253,7 +254,7 @@ onUnmounted(() => {
                <div class="relative min-w-[10em]">
                   <h1 class="text-center">Ketua</h1>
                   <img :src="signatureKetum" class="mt-[1.3em] absolute z-10 top-0 left-0 w-full h-full object-contain pb-6">
-                  <img :src="stample" class="mt-[1.3em] absolute z-10 -top-10 left-[8em] lg:scale-100 scale-90 object-contain pb-6">
+                  <img :src="stample" class="mt-[1.3em] absolute z-10 -top-10 md:left-[8em] left-[4.7em] lg:scale-100 md:scale-90 scale-75  object-contain pb-6">
                   <p class="mt-[5em] text-center">Supriyanto</p>
                </div>
                <div class="relative min-w-[10em]">
@@ -265,10 +266,8 @@ onUnmounted(() => {
          </div>
 
          <div class="mt-4 flex flex-col w-fit gap-4">
-            <button @click="saveDoc"
-               class="py-2 px-8 rounded-btn bg-[#1677FE] shadow-md font-semibold text-white">Download Dokumen</button>
-            <button @click="showSignatureCanvas(true)"
-               class="py-2 px-8 rounded-btn bg-[#54a10f] shadow-md font-semibold text-white">{{ sigDataUrl ? 'Ulangi Tanda Tangan' : 'Tanda Tangan' }}</button>
+            <button @click="saveDoc" class="py-2 px-8 rounded-btn bg-[#1677FE] shadow-md font-semibold text-white">Download Dokumen</button>
+            <button @click="showSignatureCanvas(true)" class="py-2 px-8 rounded-btn bg-[#54a10f] shadow-md font-semibold text-white">{{ sigDataUrl ? 'Ulangi Tanda Tangan' : 'Tanda Tangan' }}</button>
             <RouterLink :to="{ name: 'regist-detail' }"
                class="text-center py-2 px-8 rounded-btn bg-gray-300 shadow-md font-semibold">Keluar</RouterLink>
          </div>

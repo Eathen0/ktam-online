@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import Sidebar from "./Sidebar.vue";
+import Sidebar from '@/components/admin/Sidebar.vue'
 </script>
 
 <template>
-  <div class="flex justify-center items-center bg-blue-200 h-screen">
     <div class="grid grid-cols-12 gap-4 gap-y-2 xl:grid-rows-5 lg:grid-rows-10 grid-rows-10 w-screen xl:h-screen p-4">
-      <div class="z-50 lg:col-span-1 col-span-12 min-w-16 bg-gradient-to-b from-primary-lighter-2 to-primary-darker w-20 xl:row-span-5 lg:row-span-10 row-span-1 rounded-3xl">
-        <Sidebar />
-      </div>
       <div class="col-span-11 h-20 bg-white border border-gray-300 rounded-lg flex items-center p-4 justify-end">
         <div class="relative flex items-center w-full">
           <span class="absolute left-3 text-gray-400">
@@ -21,5 +17,4 @@ import Sidebar from "./Sidebar.vue";
       </div>x
       <div class="col-span-11 row-span-3 h-full bg-white border border-gray-300"></div>
     </div>
-  </div>
 </template>
