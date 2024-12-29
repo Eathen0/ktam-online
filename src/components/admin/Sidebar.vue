@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {routerState} from "@/routers/router.ts";
+
 const menus = [
     {
         icon: `
@@ -30,7 +32,7 @@ const menus = [
             </svg>
         `,
         name: 'Pendaftar',
-        routeName: '',
+        routeName: 'admin-registers',
         className: ''
     },
     {
@@ -54,7 +56,7 @@ const menus = [
             </svg>
         `,
         name: 'Anggota',
-        routeName: '',
+        routeName: 'admin-employees',
         className: ''
     },
     {
@@ -68,20 +70,22 @@ const menus = [
         name: 'Settings',
         routeName: 'admin-settings',
         className: 'mt-auto ml-auto'
-    },
-    {
-        icon: `
-            <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M29 14.5L23.2 8.7V13.05H11.6V15.95H23.2V20.3M26.1 23.2C24.274 25.6346 21.7283 27.433 18.8234 28.3404C15.9186 29.2479 12.8018 29.2183 9.9147 28.2559C7.02757 27.2935 4.51644 25.4472 2.73699 22.9783C0.957542 20.5095 0 17.5433 0 14.5C0 11.4567 0.957542 8.49055 2.73699 6.0217C4.51644 3.55285 7.02757 1.70647 9.9147 0.744092C12.8018 -0.218282 15.9186 -0.247858 18.8234 0.659554C21.7283 1.56697 24.274 3.36536 26.1 5.8H22.1415C20.4672 4.32341 18.4024 3.36131 16.1949 3.02913C13.9873 2.69696 11.7308 3.00883 9.69614 3.92732C7.66146 4.84581 5.93502 6.3319 4.724 8.20727C3.51298 10.0826 2.86882 12.2676 2.86882 14.5C2.86882 16.7324 3.51298 18.9174 4.724 20.7927C5.93502 22.6681 7.66146 24.1542 9.69614 25.0727C11.7308 25.9912 13.9873 26.303 16.1949 25.9709C18.4024 25.6387 20.4672 24.6766 22.1415 23.2H26.1Z"
-                    fill="white" />
-            </svg>
-        `,
-        name: 'Logout',
-        routeName: 'home',
-        className: ''
     }
 ]
+
+import {useRouter} from "vue-router";
+import {toast} from "vue3-toastify";
+
+const router = useRouter();
+
+const handleLogout = () => {
+  const toastId = toast('Loading...', {type: 'loading', autoClose: false})
+  router.push({name: 'logout'}).then(() => {
+    if (routerState.isFailed)
+      toast.remove(toastId)
+      toast('Logout: ' + routerState.errorMessages, {type: 'error'})
+  });
+}
 </script>
 
 <template>
@@ -91,6 +95,16 @@ const menus = [
                 <RouterLink :to="{ name: routeName }" v-html="icon">
                 </RouterLink>
                 <span class="lg:block hidden transition-all left-12 top-1/2 -translate-y-1/2 bg-[#2881FE] pointer-events-none duration-300 absolute opacity-0 group-hover:opacity-100 group-hover:translate-x-0 w-32 py-2 px-4 rounded-r-xl">{{ name }}</span>
+            </li>
+            <li class="group relative">
+                <button @click="handleLogout">
+                  <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M29 14.5L23.2 8.7V13.05H11.6V15.95H23.2V20.3M26.1 23.2C24.274 25.6346 21.7283 27.433 18.8234 28.3404C15.9186 29.2479 12.8018 29.2183 9.9147 28.2559C7.02757 27.2935 4.51644 25.4472 2.73699 22.9783C0.957542 20.5095 0 17.5433 0 14.5C0 11.4567 0.957542 8.49055 2.73699 6.0217C4.51644 3.55285 7.02757 1.70647 9.9147 0.744092C12.8018 -0.218282 15.9186 -0.247858 18.8234 0.659554C21.7283 1.56697 24.274 3.36536 26.1 5.8H22.1415C20.4672 4.32341 18.4024 3.36131 16.1949 3.02913C13.9873 2.69696 11.7308 3.00883 9.69614 3.92732C7.66146 4.84581 5.93502 6.3319 4.724 8.20727C3.51298 10.0826 2.86882 12.2676 2.86882 14.5C2.86882 16.7324 3.51298 18.9174 4.724 20.7927C5.93502 22.6681 7.66146 24.1542 9.69614 25.0727C11.7308 25.9912 13.9873 26.303 16.1949 25.9709C18.4024 25.6387 20.4672 24.6766 22.1415 23.2H26.1Z"
+                        fill="white" />
+                  </svg>
+                </button>
+                <span class="lg:block hidden transition-all left-12 top-1/2 -translate-y-1/2 bg-[#2881FE] pointer-events-none duration-300 absolute opacity-0 group-hover:opacity-100 group-hover:translate-x-0 w-32 py-2 px-4 rounded-r-xl">logout</span>
             </li>
         </ul>
     </div>

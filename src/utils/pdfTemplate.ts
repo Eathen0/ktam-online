@@ -9,10 +9,11 @@ const PAGE1_CONTENT = [
    "NIK",
    "Tempat, Tangga Lahir",
    "Jenis Kelamin",
+
    "Agama",
    "Email",
    "No. Telp/HP",
-   "Profesis",
+   "Profesi",
    "Pekerjaan",
    "Nama Instansi",
    "Lembaga Pemagangan Jepang",
@@ -23,11 +24,13 @@ const PAGE1_CONTENT = [
 ]
 
 const PAGE2_CONTENT = [
-   "Profinsi",
+   "Provinsi",
    "Kabupaten",
    "Kecamatan",
    "Desa / Kelurahan",
-   "Alamat",
+   "RT",
+   "RW",
+   "jalan",
    "Kode Pos"
 ]
 
@@ -42,32 +45,15 @@ const PAGE2_CONTENT2 = [
    "Alamat Instansi Bekerja",
 ]
 
-const testValue = [
-   "olks dfdlkfmdlksmf f Nama Lengkap",
-   "olks dfdlkfmdlksmf f NIK",
-   "olkkjkfsngksfjngkjsfngkjnkjfngkjkdsjfskjnfjdsnfkjdsnfkjdsnkfndskjfnkdjfnkdsjnfkjdsnfkjdsnfkjdsnfkjndskfndskjfndkjsfnjksnfjkdsnfjkdsnfkjsdnkjdsnkfjsdns dfdlkfmdlksmf f Tempat, Tangga Lahir",
-   "olks dfdlkfmdlksmf f Jenis Kelamin",
-   "olks dfdlkfmdlksmf f Agama",
-   "olks dfdlkfmdlksmf f Email",
-   "olks dfdlkfmdlksmf f No. Telp/HP",
-   "olks dfdlkfmdlksmf f Profesis",
-   "olks dfdlkfmdlksmf f Pekerjaan",
-   "olks dfdlkfmdlksmf f Nama Instansi",
-   "olks dfdlkfmdlksmf f Lembaga Pemagangan Jepang",
-   "olks dfdlkfmdlksmf f Tahun Keberangkatan",
-   "olks dfdlkfmdlksmf f Tahun Kepulangan",
-   "olks dfdlkfmdlksmf f Nama Perusahaan Jepang",
-   "olks dfdlkfmdlksmf f Bidang Kerja di Jepang",
-]
 
 const OUTER_MARGIN = 32
 const INNER_MARGIN = 44
 const MAX_CHAR_LENGTH = 45
 
-const addContent = (content: string[], doc: jsPDF, currentYPositon: number) => {
+const addContent = (content: string[], doc: jsPDF, currentYPositon: number, values: string[]) => {
    let ypos = currentYPositon
    content.forEach((field, ix) => {
-      const value = testValue[ix]
+      const value = values[ix]
       if (value.length > MAX_CHAR_LENGTH) {
          doc.text(`${field}`, INNER_MARGIN, ypos);
          value.match(new RegExp(`.{1,${MAX_CHAR_LENGTH}}`, 'g'))
@@ -79,7 +65,7 @@ const addContent = (content: string[], doc: jsPDF, currentYPositon: number) => {
             })
       } else {
          doc.text(`${field}`, INNER_MARGIN, ypos);
-         doc.text(`: ${testValue[ix]}`, INNER_MARGIN + 130, ypos); // Add line for input
+         doc.text(`: ${values[ix]}`, INNER_MARGIN + 130, ypos); // Add line for input
          ypos += 15;
       }
    })
@@ -87,8 +73,12 @@ const addContent = (content: string[], doc: jsPDF, currentYPositon: number) => {
    return ypos
 }
 
-
-export default (signature: string, sigOrient: string) => {
+interface IValues {
+    content1: string[];
+    content2: string[];
+    content3: string[];
+}
+export default (signature: string, sigOrient: string, values: IValues) => {
    const doc = new jsPDF({
       format: 'a4',
       orientation: 'portrait',
@@ -108,22 +98,22 @@ export default (signature: string, sigOrient: string) => {
       .setFontSize(12)
       
    let yPosition = 155;
-   addContent(PAGE1_CONTENT, doc, yPosition)
+   addContent(PAGE1_CONTENT, doc, yPosition, values.content1)
    doc
       .addPage()
       .setFontSize(16)
    doc.text('Data Alamat', OUTER_MARGIN, 40, { align: 'left' })
    yPosition = 55;
    doc.setFontSize(12)
-   yPosition = addContent(PAGE2_CONTENT, doc, 55)
+   yPosition = addContent(PAGE2_CONTENT, doc, 55, values.content2)
    doc.setFontSize(16)
    yPosition += 15;
    doc.text('Data Usaha / Pekerjaan', OUTER_MARGIN, yPosition, { align: 'left' })
    doc.setFontSize(12)
    yPosition += 15;
-   addContent(PAGE2_CONTENT2, doc, yPosition)
+   addContent(PAGE2_CONTENT2, doc, yPosition, values.content3)
 
-   const namaPemohon = "kjfnks skdjfksd kjsfdsf jnkj"
+   const namaPemohon = values.content1[0]
 
    
    doc.text('Pemohon', 50, docHeight - 100, { align: 'left' })

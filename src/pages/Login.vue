@@ -5,11 +5,31 @@ import svgWave from '@/assets/decorations/wave.png'
 import svgWave2 from '@/assets/decorations/wave-2.png'
 import BtnBlueVarian from '@/components/buttons/BtnBlueVarian.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
-
+import {apiEndPoint} from "@/configs/apiEndPoint.ts";
+import axios from "axios";
+import {routerMutations} from "@/routers/router.ts";
+import {useRouter} from "vue-router";
+import {toast} from "vue3-toastify";
 const doctHeight = ref(window.innerHeight)
 const handleResize = () => doctHeight.value = document.body.getBoundingClientRect().height
 onMounted(() => window.addEventListener('resize', handleResize))
 onUnmounted(() => window.removeEventListener('resize', handleResize))
+
+const router = useRouter()
+const email = ref('')
+const password = ref('')
+const handleSubmit = () => {
+  const toastID = toast('Loading...', { type: 'loading', autoClose: false })
+  axios
+    .post(apiEndPoint.login, {email: email.value, password: password.value}, {validateStatus: status => status < 400, withCredentials: true})
+    .then(res => {
+      routerMutations.setAuthenticationToken(res.data.accessToken)
+      router.push({name: 'admin-dashboard'})
+    }).catch(err => {
+      toast.remove(toastID)
+      toast('Login: ' + (err.response?.data.message || err.message || 'SERVER ERROR'), {type: 'error'})
+    })
+}
 </script>
 
 <template>
@@ -39,18 +59,18 @@ onUnmounted(() => window.removeEventListener('resize', handleResize))
       
             <h1 class="text-2xl font-bold text-white my-8 self-start">MASUK KE AKUN ANDA</h1>
       
-            <form class="mt-6">
+            <form class="mt-6" @submit.prevent="handleSubmit">
                <label className="form-control w-full">
                   <div className="label">
                      <span className="label-text font-bold">Email</span>
                   </div>
-                  <input type="text" placeholder="example@email.com" className="input border-black/50 border w-full" />
+                  <input v-model="email" type="email" placeholder="example@email.com" className="input border-black/50 border w-full" />
                </label>
                <label className="form-control w-full mt-4">
                   <div className="label">
                      <span className="label-text font-bold">Password</span>
                   </div>
-                  <input type="password" placeholder="your password" className="input border-black/50 border w-full" />
+                  <input v-model="password" type="password" placeholder="your password" className="input border-black/50 border w-full" />
                </label>
       
                <div class="flex lg:flex-row flex-col gap-4 justify-between items-start mt-8">

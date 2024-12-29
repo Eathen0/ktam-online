@@ -3,8 +3,8 @@ import imgCloud from '@/assets/decorations/cloud.png'
 import BtnGreenVarian from '@/components/buttons/BtnGreenVarian.vue';
 import Selection from '@/components/forms/Selection.vue';
 import TextInput from '@/components/forms/TextInput.vue';
-import logoIkapeksi from '@/assets/logos/ikapeksi.png'
-import logoIkapeksiBersatu from '@/assets/logos/ikapeksi-bersatu.png'
+import logoIkapeksi from '@/assets/logos/ikapeksi.png';
+import logoIkapeksiBersatu from '@/assets/logos/ikapeksi-bersatu.png';
 </script>
 
 <template>
@@ -18,27 +18,27 @@ import logoIkapeksiBersatu from '@/assets/logos/ikapeksi-bersatu.png'
                <li class="step">data usaha</li>
             </ul>
          </div>
-         <form action="" class="relative z-10 grid md:grid-cols-2 grid-cols-1 gap-4">
-            <TextInput placeholder="nama">Nama Lengkap</TextInput>
-            <TextInput placeholder="16 digit angka" type="number">NIK</TextInput>
-            <TextInput placeholder="tempat lahir">Tempat Lahir</TextInput>
-            <TextInput type="date">Tanggal Lahir</TextInput>
+         <div class="relative z-10 grid md:grid-cols-2 grid-cols-1 gap-4">
+            <TextInput required name="nama_lengkap" placeholder="nama">Nama Lengkap</TextInput>
+            <TextInput required name="nik" placeholder="16 digit angka" type="number">NIK</TextInput>
+            <TextInput required name="tempat_lahir" placeholder="tempat lahir">Tempat Lahir</TextInput>
+            <TextInput required name="tanggal_lahir" type="date">Tanggal Lahir</TextInput>
             <div>
                <div class="label">
                   <span class="label-text font-bold">Jenis Kelamin</span>
                </div>
                <div class="flex gap-4 mt-2">
                   <div class="flex items-center gap-2">
-                     <input type="radio" name="radio-2" class="radio radio-primary" checked />
-                     <label for="">Laki - Laki</label>
+                     <input required name="jenis_kelamin" id="jenis_kelamin" value="laki-laki" type="radio" class="radio radio-primary" />
+                     <label for="jenis_kelamin">Laki - Laki</label>
                   </div>
                   <div class="flex items-center gap-2">
-                     <input type="radio" name="radio-2" class="radio radio-primary" />
-                     <label for="">Perempuan</label>
+                     <input required name="jenis_kelamin" id="jenis_kelamin" value="perempuan" type="radio" class="radio radio-primary" />
+                     <label for="jenis_kelamin">Perempuan</label>
                   </div>
                </div>
             </div>
-            <Selection label="Agama">
+            <Selection required name="agama" label="Agama">
                <option value="Islam">Islam</option>
                <option value="Protestan">Kristen Protestan</option>
                <option value="Katolik">Kristen Katolik</option>
@@ -46,53 +46,57 @@ import logoIkapeksiBersatu from '@/assets/logos/ikapeksi-bersatu.png'
                <option value="Budha">Budha</option>
                <option value="Hindu">Hindu</option>
             </Selection>
-            <TextInput placeholder="example@email.com" type="email">Email</TextInput>
-            <TextInput placeholder="+62...." type="number">No. HP / WhatsApp</TextInput>
-            <Selection label="Profesi">
-               <option value="20">Pensiunan</option>
-               <option value="19">Mengurus Rumah Tangga</option>
-               <option value="18">Wiraswasta</option>
-               <option value="17">Pelajar/Mahasiswa</option>
-               <option value="15">Pegawai/Karyawan</option>
-               <option value="14">Pengusaha</option>
-               <option value="13">Pengrajin</option>
-               <option value="12">Pedagang</option>
-               <option value="11">Arsitek</option>
-               <option value="10">Apoteker</option>
-               <option value="9">Paramedis</option>
-               <option value="8">Advokat</option>
-               <option value="7">Akuntan</option>
-               <option value="6">Insinyur</option>
-               <option value="5">Dokter</option>
-               <option value="4">Nelayan</option>
-               <option value="3">Petani</option>
-               <option value="2">Dosen</option>
-               <option value="1">Guru</option>
-               <option value="0">Lain-lain</option>
+            <TextInput required name="email" placeholder="example@email.com" type="email">Email</TextInput>
+            <TextInput required name="no_telepon" placeholder="no hp / whatsapp" type="number">No. HP / WhatsApp</TextInput>
+            <Selection name="profesi" label="Profesi">
+               <option value="Pensiunan">Pensiunan</option>
+               <option value="Mengurus">Mengurus Rumah Tangga</option>
+               <option value="Wiraswasta">Wiraswasta</option>
+               <option value="Pelajar">Pelajar/Mahasiswa</option>
+               <option value="Pegawai">Pegawai/Karyawan</option>
+               <option value="Pengusaha">Pengusaha</option>
+               <option value="Pengrajin">Pengrajin</option>
+               <option value="Pedagang">Pedagang</option>
+               <option value="Arsitek">Arsitek</option>
+               <option value="Apoteker">Apoteker</option>
+               <option value="Paramedis">Paramedis</option>
+               <option value="Advokat">Advokat</option>
+               <option value="Akuntan">Akuntan</option>
+               <option value="Insinyur">Insinyur</option>
+               <option value="Dokter">Dokter</option>
+               <option value="Nelayan">Nelayan</option>
+               <option value="Petani">Petani</option>
+               <option value="Dosen">Dosen</option>
+               <option value="Guru">Guru</option>
+               <option value="Lain-lain">Lain-lain</option>
             </Selection>
-            <TextInput placeholder="Profesi Lainnya">Profesi Lainnya</TextInput>
-            <Selection label="Pekerjaan">
-               <option value="1">Negeri/TNI/POLRI</option>
-               <option value="2">Instansi Swasta</option>
-               <option value="3">Wiraswasta</option>
-               <option value="4">Belum Bekerja</option>
+            <TextInput name="profesi_lainnya" placeholder="Profesi Lainnya">Profesi Lainnya</TextInput>
+            <Selection required name="pekerjaan" label="Pekerjaan">
+               <option value="Negeri/TNI/POLRI">Negeri/TNI/POLRI</option>
+               <option value="Instansi Swasta">Instansi Swasta</option>
+               <option value="Wirasw asta">Wirasw asta</option>
+               <option value="Belum Bekerja">Belum Bekerja</option>
             </Selection>
-            <TextInput placeholder="Nama Instansi / Tempat Kerja">Nama Instansi / Tempat Kerja</TextInput>
-            <TextInput placeholder="Lembaga Pemagangan Jepang">Lembaga Pemagangan Jepang</TextInput>
+            <TextInput name="instansi" placeholder="Nama Instansi / Tempat Kerja">Nama Instansi / Tempat Kerja</TextInput>
+            <TextInput name="nama_perusahaan_magang" placeholder="Lembaga Pemagangan Jepang">Lembaga Pemagangan Jepang</TextInput>
+            <TextInput name="bidang_kerja_magang" placeholder="Bidang Kerja di Jepang">Bidang Kerja di Jepang</TextInput>
             <div>
                <div class="label">
                   <span class="label-text font-bold">Tahun Keberangkatan dan kepulangan</span>
                </div>
                <div class="grid grid-cols-2 gap-4">
-                  <TextInput type="number" placeholder="Berangkat"></TextInput>
-                  <TextInput type="number" placeholder="Pulang"></TextInput>
+                  <TextInput name="tahun_berangkat" type="number" placeholder="Berangkat"></TextInput>
+                  <TextInput name="tahun_pulang" type="number" placeholder="Pulang"></TextInput>
                </div>
             </div>
 
-            <div class="md:col-span-2 text-center mt-10">
-               <BtnGreenVarian>Lanjut</BtnGreenVarian>
-            </div>
-         </form>
+           <div class="md:col-span-2 text-center mt-10">
+              <RouterLink :to="{ name: 'home' }" class="text-center py-2 px-8 rounded-btn bg-gray-300 shadow-md font-semibold">Keluar</RouterLink>
+              <a href="#page-2" class="md:col-span-2 text-center mt-10 ml-4">
+                <BtnGreenVarian type="button">Lanjut</BtnGreenVarian>
+              </a>
+           </div>
+         </div>
 
          <img :src="imgCloud" class="absolute bottom-0 left-0 w-full h-1/2 object-cover pointer-events-none">
       </div>

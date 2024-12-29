@@ -3,6 +3,11 @@ import useEventListener from "@/hooks/useEventListener";
 import { Chart, registerables } from "chart.js";
 import { onUnmounted, ref, shallowRef } from "vue";
 import { onMounted } from "vue";
+import {routerState} from "@/routers/router.ts";
+import PageTitle from "@/components/PageTitle.vue";
+
+const data = routerState.routerResult
+console.log(data)
 
 const myChart = shallowRef<HTMLCanvasElement>();
 const time = ref('');
@@ -101,20 +106,7 @@ useEventListener(window, 'resize', () => {
 <template>
    <div class="grid grid-cols-11 gap-4 xl:grid-rows-5 grid-rows-9 w-full xl:h-screen p-4">
       <div class="xl:col-span-6 lg:col-span-11 col-span-12 lg:row-span-3 row-span-2 overflow-hidden rounded-2xl">
-         <div class="flex">
-            <p class="font-bold text-lg">Dashboard</p>
-            <div class="relative ml-4 w-fit">
-               <svg width="28" height="23" viewBox="0 0 28 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                     d="M28 5.0614V18.6136C28.0001 19.7092 27.5907 20.7635 26.8558 21.5606C26.1209 22.3578 25.1159 22.8376 24.0464 22.9019L23.8 22.909H4.2C3.1287 22.9091 2.09788 22.4905 1.31843 21.7388C0.53899 20.9872 0.0698495 19.9593 0.00700016 18.8656L0 18.6136V5.0614L13.223 14.0776L13.3854 14.1721C13.5768 14.2677 13.787 14.3174 14 14.3174C14.213 14.3174 14.4232 14.2677 14.6146 14.1721L14.777 14.0776L28 5.0614Z"
-                     fill="black" />
-                  <path
-                     d="M23.7999 0C25.3119 0 26.6377 0.816136 27.3769 2.0432L13.9999 11.1639L0.622925 2.0432C0.974034 1.4602 1.45633 0.971489 2.02961 0.617814C2.60288 0.26414 3.25052 0.0557511 3.91852 0.0100227L4.19993 0H23.7999Z"
-                     fill="black" />
-               </svg>
-               <div class="absolute -top-1 -right-1 bg-red-500 rounded-full w-3 h-3 "></div>
-            </div>
-         </div>
+         <PageTitle class="flex" title="Dashboard" />
          <div class="pt-5 h-full">
             <div class="bg-gradient-to-b from-primary-lighter-2 h-full to-primary-darker rounded-2xl">
                <canvas ref="myChart" class="p-5 w-full"></canvas>
@@ -135,7 +127,7 @@ useEventListener(window, 'resize', () => {
             </div>
             <div class="flex flex-col items-center">
                <h1 class="font-bold text-xl">JUMLAH ANGGOTA </h1>
-               <h3 class="font-bold text-6xl">1,899</h3>
+               <h3 class="font-bold text-6xl">{{ data.allMemberCount.count }}</h3>
             </div>
          </div>
       </div>
@@ -155,11 +147,11 @@ useEventListener(window, 'resize', () => {
    
          <div class="row-span-4 col-span-1 flex flex-col justify-center items-center bg-blue-500 p-6 text-white">
             <p class="text-sm font-medium mb-4">BELUM BAYAR</p>
-            <p class="text-6xl font-bold">15</p>
+            <p class="text-6xl font-bold">{{ data.registerCount.count }}</p>
          </div>
          <div class="row-span-4 col-span-1 flex flex-col justify-center items-center bg-blue-400 p-6 text-black">
             <p class="text-sm font-medium mb-4">MENUNGGU KONFIRMASI</p>
-            <p class="text-6xl font-bold">20</p>
+            <p class="text-6xl font-bold">{{ data.needVerifyCount.count }}</p>
          </div>
       </div>
       <div class="xl:col-span-8 carousel gap-6 lg:col-span-11 col-span-12 row-span-2 rounded-2xl">

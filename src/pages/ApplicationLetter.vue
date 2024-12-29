@@ -8,16 +8,65 @@ import trimCanvas from '@/utils/trimCanvas';
 import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
 import useEventListener from '@/hooks/useEventListener';
 import pdfTemplate from '@/utils/pdfTemplate';
+import {routerState} from "@/routers/router.ts";
+import {useRouter} from "vue-router";
+import {cacheSet} from "@/utils/cachesApp.ts";
+
 
 const
-signatureOrientation = ref<'portrait' | 'landscape'>('portrait'),
-signatureCanvas = shallowRef<HTMLCanvasElement>(),
-sigDataUrl = ref<string | null>(null),
-canvasIsShown = ref(false);
+  router = useRouter(),
+  signatureOrientation = ref<'portrait' | 'landscape'>('portrait'),
+  signatureCanvas = shallowRef<HTMLCanvasElement>(),
+  sigDataUrl = ref<string | null>(null),
+  biodata = routerState.routerResult[0],
+  canvasIsShown = ref(false);
 let signaturePad: SignaturePad | undefined = undefined
-const saveDoc = () => {
+const saveDoc = async () => {
    if (sigDataUrl.value && signatureOrientation.value) {
-      pdfTemplate(sigDataUrl.value, signatureOrientation.value).save('test-pdf')
+      const doc = pdfTemplate(sigDataUrl.value, signatureOrientation.value, {
+        content1: [
+          biodata.nama_lengkap,
+          biodata.nik,
+          `${biodata.tempat_lahir}, ${new Date(biodata.tanggal_lahir).toLocaleDateString('id-ID')}`,
+          biodata.jenis_kelamin,
+          biodata.agama || '',
+          biodata.email,
+          biodata.no_telepon,
+          biodata.profesi,
+          biodata.pekerjaan,
+          biodata.instansi,
+          biodata.nama_perusahaan_magang,
+          biodata.tahun_berangkat,
+          biodata.tahun_pulang,
+          biodata.nama_perusahaan_magang,
+          biodata.bidang_kerja_magang
+        ],
+        content2: [
+          biodata.provinsi,
+          biodata.kabupaten,
+          biodata.kecamatan,
+          biodata.desa,
+          biodata.rt,
+          biodata.rw,
+          biodata.jalan,
+          biodata.kode_pos
+        ],
+        content3: [
+          biodata.nama_usaha,
+          biodata.bidang_usaha,
+          biodata.karyawan_usaha,
+          biodata.alamat_usaha,
+          biodata.tahun_berdiri,
+          biodata.nama_perusahaan_bekerja,
+          biodata.jabatan_bekerja,
+          biodata.alamat_perusahaan_bekerja
+        ]
+      })
+
+     const pdfBlob = doc.output('blob')
+     cacheSet('cache-doc', pdfBlob)
+     // doc.save('BLANKO_PENDAFTARAN_KTA.pdf')
+     router.push({ name: 'regist-detail', params: { nik: biodata.nik, email: biodata.email } })
    }
 
 }
@@ -73,7 +122,7 @@ onUnmounted(() => {
    <div class="bg-gray-200 h-max">
       <div class="min-h-screen h-full lg:pb-0 pb-6 flex flex-col lg:flex-row justify-center items-center lg:items-start gap-4">
          <!-- DISPLAYED PDF -->
-         <div class="flex flex-col relative bg-white py-[2.5em] sm:px-[4em] px-[3em] w-screen md:aspect-[1/1.414] aspect-auto"
+         <div class="flex flex-col relative bg-white py-[2.5em] sm:px-[4em] px-[3em] w-screen lg:aspect-[1/1.414] aspect-auto"
             :style="{ maxHeight: 'auto', maxWidth: '210mm', fontSize: 'clamp(12px, 2vw, 16px)', fontFamily: 'serif' }">
             <div class="text-center">
                <img :src="logoIkapeksi" class="inline-block w-[10em]">
@@ -87,79 +136,78 @@ onUnmounted(() => {
                      <tr>
                         <td class="min-w-[20ch] align-top">Nama Lengkap</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.nama_lengkap }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">NIK</td>
                         <td class="align-top">:</td>
-                        <td class="align-top"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
-                           labore dolor obcaecati voluptate nobis, praesentium illo magni. Vel nostrum nobis odio
-                           nesciunt nisi cupiditate delectus iure quaerat, odit facere expedita.</td>
+                        <td class="align-top">{{ biodata.nik }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Tempat, Tangga Lahir</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.tempat_lahir }}, {{ new Date(biodata.tanggal_lahir).toLocaleDateString('id-ID') }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Jenis Kelamin</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.jenis_kelamin }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Agama</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.agama }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Email</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.email }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">No. Telp/HP</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.no_telepon }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Profesis</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.profesi }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Pekerjaan</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.pekerjaan }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Nama Instansi</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.instansi }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Lembaga Pemagangan Jepang</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.nama_perusahaan_magang }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Tahun Keberangkatan</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.tahun_berangkat }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Tahun Kepulangan</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.tahun_pulang }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Nama Perusahaan Jepang</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <!-- TEMPORARY -->
+                        <td class="align-top w-full">{{ biodata.nama_perusahaan_magang }}</td>
                      </tr>
                      <tr>
                         <td class="align-top">Bidang Kerja di Jepang</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.bidang_kerja_magang }}</td>
                      </tr>
                   </tbody>
                </table>
@@ -172,27 +220,42 @@ onUnmounted(() => {
                      <tr>
                         <td class="min-w-[20ch] align-top">Profinsi</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.provinsi }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Kabupaten</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.kabupaten }}</td>
                      </tr>
                      <tr>
-                        <td class="min-w-[20ch] align-top">Desa / Kelurahan</td>
+                        <td class="min-w-[20ch] align-top">Kecamatan</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.kecamatan }}</td>
                      </tr>
                      <tr>
-                        <td class="min-w-[20ch] align-top">Alamat</td>
+                        <td class="min-w-[20ch] align-top">Desa</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.desa }}</td>
+                     </tr>
+                     <tr>
+                        <td class="min-w-[20ch] align-top">RT</td>
+                        <td class="align-top">:</td>
+                        <td class="align-top w-full">{{ biodata.rt }}</td>
+                     </tr>
+                     <tr>
+                        <td class="min-w-[20ch] align-top">RW</td>
+                        <td class="align-top">:</td>
+                        <td class="align-top w-full">{{ biodata.rw }}</td>
+                     </tr>
+                     <tr>
+                        <td class="min-w-[20ch] align-top">Jalan</td>
+                        <td class="align-top">:</td>
+                        <td class="align-top w-full">{{ biodata.jalan }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Kode Pos</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.kode_pos }}</td>
                      </tr>
                   </tbody>
                </table>
@@ -205,37 +268,42 @@ onUnmounted(() => {
                      <tr>
                         <td class="min-w-[20ch] align-top">Nama Usaha</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.nama_usaha }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Bidang Usaha</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.bidang_usaha }}</td>
+                     </tr>
+                     <tr>
+                        <td class="min-w-[20ch] align-top">Jumlah Pekerja</td>
+                        <td class="align-top">:</td>
+                        <td class="align-top w-full">{{ biodata.karyawan_usaha }}</td>
+                     </tr>
+                     <tr>
+                        <td class="min-w-[20ch] align-top">Alamat Usahai</td>
+                        <td class="align-top">:</td>
+                        <td class="align-top w-full">{{ biodata.alamat_usaha }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Tahun Berdiri</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
-                     </tr>
-                     <tr>
-                        <td class="min-w-[20ch] align-top">Alamat Usaha</td>
-                        <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.tahun_berdiri }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Nama Instansi Bekerja</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.nama_perusahaan_bekerja }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Jabatan</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.jabatan_bekerja }}</td>
                      </tr>
                      <tr>
                         <td class="min-w-[20ch] align-top">Alamat Instansi Bekerja</td>
                         <td class="align-top">:</td>
-                        <td class="align-top w-full">......................................................</td>
+                        <td class="align-top w-full">{{ biodata.alamat_perusahaan_bekerja }}</td>
                      </tr>
                   </tbody>
                </table>
@@ -266,9 +334,9 @@ onUnmounted(() => {
          </div>
 
          <div class="mt-4 flex flex-col w-fit gap-4">
-            <button @click="saveDoc" class="py-2 px-8 rounded-btn bg-[#1677FE] shadow-md font-semibold text-white">Download Dokumen</button>
+            <button @click="saveDoc" class="py-2 px-8 rounded-btn bg-[#1677FE] shadow-md font-semibold text-white" :class="{ 'opacity-30 pointer-events-none': !sigDataUrl }">Simpan Dokumen</button>
             <button @click="showSignatureCanvas(true)" class="py-2 px-8 rounded-btn bg-[#54a10f] shadow-md font-semibold text-white">{{ sigDataUrl ? 'Ulangi Tanda Tangan' : 'Tanda Tangan' }}</button>
-            <RouterLink :to="{ name: 'regist-detail' }"
+            <RouterLink :to="{ name: 'regist-detail', params: { nik: biodata.nik, email: biodata.email } }"
                class="text-center py-2 px-8 rounded-btn bg-gray-300 shadow-md font-semibold">Keluar</RouterLink>
          </div>
       </div>
