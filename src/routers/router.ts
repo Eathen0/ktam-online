@@ -135,7 +135,21 @@ const router = createRouter({
         {
             path: '/admin',
             component: () => import('@/components/layouts/AdminLayout.vue'),
-            children: routerAdmin
+            children: routerAdmin,
+            beforeEnter: (__, _, next) => {
+                if (!routerState.authenticationToken) {
+                    axios.post(apiEndPoint.refreshToken, {}, {withCredentials: true})
+                        .then(res => {
+                            routerMutations.setAuthenticationToken(res.data.accessToken)
+                            next()
+                        })
+                        .catch(err => {
+                            routerState.isFailed = true
+                            routerState.errorMessages = err.response?.data.message || err.message || 'SERVER ERROR'
+                            next({name: 'not-found'})
+                        })
+                } else next();
+            }
         },
         // SUPER ADMIN ROUTES
         {
@@ -156,25 +170,10 @@ const router = createRouter({
     ]
 })
 
-router.beforeEach((to, _, next) => {
+router.beforeEach(() => {
     routerState.isFailed = false
     routerState.isLoaded = false
     routerState.isLoading = true
-
-    if (to.path.includes('/admin') || to.path.includes('/super-admin')) {
-        if (!routerState.authenticationToken) {
-            axios.post(apiEndPoint.refreshToken, {}, {withCredentials: true})
-                .then(res => {
-                    routerMutations.setAuthenticationToken(res.data.accessToken)
-                    next()
-                })
-                .catch(err => {
-                    routerState.isFailed = true
-                    routerState.errorMessages = err.response?.data.message || err.message || 'SERVER ERROR'
-                    next({name: 'not-found'})
-                })
-        } else next();
-    } else next()
 })
 
 router.afterEach((_, __, failure) => {
